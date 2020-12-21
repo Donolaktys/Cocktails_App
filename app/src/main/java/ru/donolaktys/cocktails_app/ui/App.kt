@@ -3,6 +3,7 @@ package ru.donolaktys.cocktails_app.ui
 import android.app.Application
 import ru.donolaktys.cocktails_app.di.AppComponent
 import ru.donolaktys.cocktails_app.di.DaggerAppComponent
+import ru.donolaktys.cocktails_app.di.modules.AppModule
 
 class App: Application() {
 
@@ -17,7 +18,7 @@ class App: Application() {
         super.onCreate()
         instance = this
         _appComponent = DaggerAppComponent.builder()
-//            .appModule(AppModule(this))
+            .appModule(AppModule(this))
             .build()
     }
 }

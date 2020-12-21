@@ -20,20 +20,16 @@ class ApiModule {
 
     @Named("apiKey")
     @Provides
-    fun apiKey() = "1"
+    fun apiKey() = "1/"
 
     @Named("baseUrl")
     @Provides
     fun baseUrl() = "https://www.thecocktaildb.com/api/json/v1/"
 
-    @Named("endUrl")
-    @Provides
-    fun endUrl() = "/search.php?f=a"
-
     @Named("finalUrl")
     @Provides
-    fun finalUrl(@Named("baseUrl") baseUrl: String, @Named("apiKey") apikey: String, @Named("endUrl") endUrl: String): String =
-        (baseUrl + apikey + endUrl)
+    fun finalUrl(@Named("baseUrl") baseUrl: String, @Named("apiKey") apikey: String): String =
+        (baseUrl + apikey)
 
     @Provides
     fun api(@Named("finalUrl") finalUrl: String, gson: Gson): IDataSource = Retrofit.Builder()
@@ -42,7 +38,6 @@ class ApiModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create(IDataSource::class.java)
-
 
     @Singleton
     @Provides

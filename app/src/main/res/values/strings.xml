@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Cocktails App</string>
-    <string name="random_cocktail_btn_text">Lookup a random cocktail</string>
+    <string name="random_cocktail_btn_text">Or lookup a random cocktail</string>
+    <string name="choose_from_the_alphabetical_index">Choose from the alphabetical index</string>
 </resources>
