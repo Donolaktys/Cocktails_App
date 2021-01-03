@@ -1,10 +1,8 @@
 package ru.donolaktys.cocktails_app.di
 
 import dagger.Component
-import ru.donolaktys.cocktails_app.di.modules.ApiModule
-import ru.donolaktys.cocktails_app.di.modules.AppModule
-import ru.donolaktys.cocktails_app.di.modules.CiceroneModule
-import ru.donolaktys.cocktails_app.di.modules.RepoModule
+import ru.donolaktys.cocktails_app.di.modules.*
+import ru.donolaktys.cocktails_app.mvp.model.repo.RetrofitDrinksRepo
 import ru.donolaktys.cocktails_app.mvp.presenter.MainPresenter
 import ru.donolaktys.cocktails_app.mvp.presenter.StartPresenter
 import ru.donolaktys.cocktails_app.ui.AbcRvAdapter
@@ -18,7 +16,8 @@ import javax.inject.Singleton
         AppModule::class,
         ApiModule::class,
         CiceroneModule::class,
-        RepoModule::class
+        RepoModule::class,
+        ImageModule::class
     ]
 )
 interface AppComponent {
@@ -27,4 +26,5 @@ interface AppComponent {
     fun inject(mainPresenter: MainPresenter)
     fun inject(startPresenter: StartPresenter)
     fun inject(abcRvAdapter: AbcRvAdapter.ViewHolder)
+    fun inject(retrofitDrinksRepo: RetrofitDrinksRepo)
 }

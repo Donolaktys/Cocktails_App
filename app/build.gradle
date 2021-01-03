@@ -23,6 +23,13 @@ android {
         viewBinding true
     }
 
+    buildTypes.each{
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def cocktailsApiKey = properties.getProperty("cocktails_api_key", "")
+        it.buildConfigField "String", "COCKTAILS_API_KEY", cocktailsApiKey
+    }
+
     buildTypes {
         release {
             minifyEnabled false

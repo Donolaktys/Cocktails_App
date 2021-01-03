@@ -7,4 +7,5 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 interface IStartView : MvpView {
     fun init()
     fun loadInfo(name: String, description: String)
+    fun loadImage(url: String)
 }

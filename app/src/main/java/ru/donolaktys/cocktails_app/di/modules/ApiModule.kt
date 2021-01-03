@@ -8,6 +8,7 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.donolaktys.cocktails_app.BuildConfig
 import ru.donolaktys.cocktails_app.mvp.model.api.IDataSource
 import ru.donolaktys.cocktails_app.mvp.model.network.INetworkStatus
 import ru.donolaktys.cocktails_app.ui.App
@@ -18,22 +19,13 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
 
-    @Named("apiKey")
-    @Provides
-    fun apiKey() = "1/"
-
     @Named("baseUrl")
     @Provides
-    fun baseUrl() = "https://www.thecocktaildb.com/api/json/v1/"
-
-    @Named("finalUrl")
-    @Provides
-    fun finalUrl(@Named("baseUrl") baseUrl: String, @Named("apiKey") apikey: String): String =
-        (baseUrl + apikey)
+    fun baseUrl() = "https://www.thecocktaildb.com/api/json/v1/" + BuildConfig.COCKTAILS_API_KEY + "/"
 
     @Provides
-    fun api(@Named("finalUrl") finalUrl: String, gson: Gson): IDataSource = Retrofit.Builder()
-        .baseUrl(finalUrl)
+    fun api(@Named("baseUrl") baseUrl: String, gson: Gson): IDataSource = Retrofit.Builder()
+        .baseUrl(baseUrl)
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()

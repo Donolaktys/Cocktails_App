@@ -1,12 +1,10 @@
 package ru.donolaktys.cocktails_app.mvp.presenter
 
-import android.widget.ImageView
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import moxy.MvpPresenter
 import ru.donolaktys.cocktails_app.mvp.model.api.IDataSource
 import ru.donolaktys.cocktails_app.mvp.model.entity.Drink
-import ru.donolaktys.cocktails_app.mvp.model.image.IImageLoader
 import ru.donolaktys.cocktails_app.mvp.model.repo.IDrinksRepo
 import ru.donolaktys.cocktails_app.mvp.presenter.list.IAbcListPresenter
 import ru.donolaktys.cocktails_app.mvp.view.IStartView
@@ -16,17 +14,17 @@ import javax.inject.Inject
 
 class StartPresenter() : MvpPresenter<IStartView>() {
 
-    @Inject lateinit var api : IDataSource
-    @Inject lateinit var imageLoader: IImageLoader<ImageView>
-    @Inject lateinit var drinksRepo: IDrinksRepo
-    @Inject lateinit var uiScheduler: Scheduler
-
-    val drink: Single<Drink> by lazy { api.getRandom().subscribeOn(uiScheduler) }
+    @Inject
+    lateinit var api: IDataSource
+    @Inject
+    lateinit var drinksRepo: IDrinksRepo
+    @Inject
+    lateinit var uiScheduler: Scheduler
 
     class AbcListPresenter : IAbcListPresenter {
         override var itemClickListener: ((IAbcItemView) -> Unit)? = null
 
-        private val BTN_TEXT : Char = 'A'
+        private val BTN_TEXT: Char = 'A'
 
         override fun bindView(view: IAbcItemView) {
             var thisBtnText = (BTN_TEXT + view.pos)
@@ -43,13 +41,25 @@ class StartPresenter() : MvpPresenter<IStartView>() {
         super.onFirstViewAttach()
         App.component.inject(this)
         viewState.init()
-        drink.subscribe({
-            val _drink = it
-            _drink.strDrink?.let { _drink.strInstructions?.let { viewState.loadInfo(_drink.strDrink, _drink.strInstructions) }}
-        },{
-            Single.error<Throwable>(it)
-        })
 
 //        abcListPresenter.itemClickListener = {view -> }
+    }
+
+    fun randomInit() {
+        api.getRandom()
+            .subscribeOn(uiScheduler)
+            .subscribe({
+                val _drink : Drink = it.drinks[0]
+                _drink.strDrink?.let {
+                    _drink.strInstructions?.let {
+                        viewState.loadInfo(_drink.strDrink, _drink.strInstructions)
+                    }
+                }
+                _drink.strDrinkThumb?.let {
+                    viewState.loadImage(_drink.strDrinkThumb)
+                }
+            }, {
+                Single.error<Throwable>(it)
+            })
     }
 }
